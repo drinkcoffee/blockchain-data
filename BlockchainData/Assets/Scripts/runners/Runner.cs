@@ -11,6 +11,10 @@ public abstract class Runner {
     protected MonoBehaviour monoBehaviour;
     private TextMeshProUGUI outputText;
     protected string url;
+    protected string postBody = null;
+    protected string authToken = null;
+
+    protected uint network = 13371;
 
     private DateTime start;
     public bool RequestInProgress = false;
@@ -23,15 +27,41 @@ public abstract class Runner {
     }
 
     public void Go() {
-        this.monoBehaviour.StartCoroutine(fetch(this.url, processResponse));
+        if (this.postBody == null) {
+            this.monoBehaviour.StartCoroutine(fetchGet(processResponse));
+        }
+        else {
+            this.monoBehaviour.StartCoroutine(fetchPost(processResponse));
+        }
     }
 
-    private IEnumerator fetch(string url, System.Action<string> callback) {
+    private IEnumerator fetchGet(System.Action<string> callback) {
         RequestInProgress = true;
-        Log("Fetching: " + url);
+        Log($"Fetching: {this.url}");
         indicateRequestSent();
-        using (UnityEngine.Networking.UnityWebRequest request = UnityEngine.Networking.UnityWebRequest.Get(url)) {
+        using (UnityEngine.Networking.UnityWebRequest request = UnityEngine.Networking.UnityWebRequest.Get(this.url)) {
             request.SetRequestHeader("Accept", "application/json");
+            yield return request.SendWebRequest();
+            indicateResponseReceived();
+
+            if (request.result == UnityEngine.Networking.UnityWebRequest.Result.Success) {
+                callback?.Invoke(request.downloadHandler.text);
+            } else {
+                Log($"ERROR: Error fetching NFTs: {request.error}");
+                callback?.Invoke(null);
+            }
+        }
+    }
+
+    private IEnumerator fetchPost(System.Action<string> callback) {
+        RequestInProgress = true;
+        Log($"Fetching: {this.url}, with: {this.postBody}");
+        indicateRequestSent();
+        using (UnityEngine.Networking.UnityWebRequest request = UnityEngine.Networking.UnityWebRequest.Post(this.url, this.postBody, "application/json")) {
+            request.SetRequestHeader("Accept", "application/json");
+            if (this.authToken != null) {
+                request.SetRequestHeader("Authorization", "Bearer " + this.authToken);
+            }
             yield return request.SendWebRequest();
             indicateResponseReceived();
 

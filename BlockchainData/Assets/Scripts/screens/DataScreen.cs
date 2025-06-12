@@ -25,6 +25,12 @@ public class DataScreen : MonoBehaviour
             BlockscoutAccount api = new BlockscoutAccount(this, output, accountAddress);
             api.Go();
         }
+        else if (buttonText == "CoTok") {
+            string ethTokenAddress = "0x52A6c53869Ce09a731CD772f245b97A4401d3348";
+
+            CodexTokenInfo api = new CodexTokenInfo(this, output, ethTokenAddress);
+            api.Go();
+        }
         else {
             output.text = "Not supported yet!";
         }
