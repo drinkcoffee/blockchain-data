@@ -13,6 +13,7 @@ public class ImmutableNftApi : Runner {
 
     public ImmutableNftApi(MonoBehaviour monoBehaviour, TextMeshProUGUI output, string accountAddress, string collectionAddress) : base(monoBehaviour, output) {
         this.url = $"https://api.immutable.com/v1/chains/imtbl-zkevm-mainnet/accounts/{accountAddress}/nfts?contract_address={collectionAddress}";
+        Log("Fetching token ids and balances for an NFT collection owned by an account");
     }
 
 

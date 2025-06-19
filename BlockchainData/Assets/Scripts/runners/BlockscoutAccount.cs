@@ -10,6 +10,7 @@ using System.Collections;
 public class BlockscoutAccount : Runner {
 
     public BlockscoutAccount(MonoBehaviour monoBehaviour, TextMeshProUGUI output, string accountAddress) : base(monoBehaviour, output) {
+        Log("Fetching information about an address");
         this.url = $"https://explorer.immutable.com/api/v2/addresses/{accountAddress}";
     }
 

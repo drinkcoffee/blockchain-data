@@ -31,6 +31,13 @@ public class DataScreen : MonoBehaviour
             CodexTokenInfo api = new CodexTokenInfo(this, output, ethTokenAddress);
             api.Go();
         }
+        else if (buttonText == "GsAcc") {
+            // Ignored
+            string ethTokenAddress = "0x52A6c53869Ce09a731CD772f245b97A4401d3348";
+
+            GoldSkyBalance api = new GoldSkyBalance(this, output, ethTokenAddress);
+            api.Go();
+        }
         else {
             output.text = "Not supported yet!";
         }

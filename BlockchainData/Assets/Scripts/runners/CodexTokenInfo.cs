@@ -10,6 +10,7 @@ using System.Collections;
 public class CodexTokenInfo : Runner {
 
     public CodexTokenInfo(MonoBehaviour monoBehaviour, TextMeshProUGUI output, string tokenAddress) : base(monoBehaviour, output) {
+        Log("Fetching information about an ERC20 contract");
         this.url = $"https://graph.codex.io/graphql";
         this.postBody = 
         "query {" +
